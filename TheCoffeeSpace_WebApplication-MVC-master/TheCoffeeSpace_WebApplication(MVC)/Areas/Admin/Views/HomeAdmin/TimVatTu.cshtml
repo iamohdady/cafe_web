@@ -1,0 +1,41 @@
+﻿@model IEnumerable<TheCoffeeSpace_WebApplication_MVC_.Models.TbVatTu>
+
+@{
+    ViewData["Title"] = "TimVatTu";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Tìm Vật Tư</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên Vật Tư
+            </th>
+            <th>
+                Đơn Vị Tính
+            </th>
+            <th>
+                Ghi Chú
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenVatTu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DonViTinh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GhiChu)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

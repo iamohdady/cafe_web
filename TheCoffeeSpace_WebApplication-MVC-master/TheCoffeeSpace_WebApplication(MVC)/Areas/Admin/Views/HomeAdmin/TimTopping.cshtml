@@ -1,0 +1,45 @@
+﻿@model IEnumerable<TheCoffeeSpace_WebApplication_MVC_.Models.TbTopping>
+
+@{
+    ViewData["Title"] = "TimTopping";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Tìm Topping</h1>
+
+<br />
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Tên Topping
+            </th>
+            <th>
+                Gía Bán
+            </th>
+            <th>
+                Ảnh
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenTopping)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaBan)
+            </td>
+            <td>
+                <img src="@Url.Content("../LayoutAdmin/images/"+item.Anh)" alt=" Chua cap nhat" style="height:100px;width:100px" />
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+@section Scripts
+    {
+            }

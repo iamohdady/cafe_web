@@ -1,0 +1,158 @@
+﻿@using TheCoffeeSpace_WebApplication_MVC_.Models;
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<TbHoaDonBan>
+
+@{
+    ViewData["Title"] = "HoaDonBan";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Hóa Đơn Bán</h1>
+@*
+<p>
+    <a asp-action="Create">Thêm Sản Phẩm</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Hóa Đơn Bán
+            </th>
+            <th>
+                Ngày Lập
+            </th>
+            <th>
+                Mã Nhà Cung Cấp
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaHoaDonBan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayBan)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaKhachHang)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MaHoaDonBan">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.MaHoaDonBan">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MaHoaDonBan">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<br />
+@Html.PagedListPager(Model, page => Url.Action("HoaDonBan", new {page= page}), new X.PagedList.Web.Common.PagedListRenderOptions(){
+            LiElementClasses = new List<String>{"bg-secondary page-item"},
+            PageClasses = new List<String>{"page-link"}
+        })
+*@
+</br>
+
+<div class="form-group">
+    <div class="input-group col-xs-12">
+        <input type="text" id="timkiem" class="form-control" id="exampleInputEmail3" placeholder="Nhập mã hóa đơn cần tìm kiếm">
+        <span class="input-group-append">
+            <button class="file-upload-browse btn btn-gradient-primary" type="button" onclick="timHoaDonBan()">Tìm kiếm</button>
+        </span>
+    </div>
+</div>
+<br />
+
+<script>
+    function showHoaDonBanByCategory(getUrl) {
+        var str = '';
+        $.ajax({
+            type: "GET",
+            url: getUrl,
+            dataType: "json",
+            success: function (data) {
+            }
+        }
+</script>
+<table id="display-search" class="table">
+</table>
+
+<div class="pagination"></div>
+
+@section Scripts
+    {
+    <script>
+            var pageLimited = 8;
+
+        $(document).ready(function () {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/hoadonban",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+
+                        var i = 0;
+                        var content = '<tr class="table-warning"> <th> Mã Hóa Đơn Bán </th>' +
+                            '<th> Ngày Bán </th> <th> Mã Khách Hàng </th></tr>';
+                        $.each(result, function (key, val) {
+                            content += '<tr >' +
+                                "<td>" + val["maHoaDonBan"] + "</td>" +
+                                "<td>" + val["ngayBan"] + "</td>" +
+                                "<td>" + val["maKhachHang"] + "</td>" +
+                                 '</tr>'
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+
+
+                });
+            }
+            catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>')
+            }
+        });
+
+        function timHoaDonBan() {
+            try {
+                var maHoaDonBan = $("#timkiem").val();
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/hoadonban",
+                    dataType: "json",
+                    success: function (result) {
+                        var content = '<tr class="table-warning"> <th> Mã Hóa Đơn Bán </th>' +
+                            '<th> Ngày Bán </th> <th> Mã Khách Hàng </th></tr>';
+                        $.each(result, function (key, val) {
+                            if (maHoaDonBan == val["maHoaDonBan"] || maHoaDonBan == "") {
+                                content += '<tr >' +
+                                    "<td>" + val["maHoaDonBan"] + "</td>" +
+                                    "<td>" + val["ngayBan"] + "</td>" +
+                                    "<td>" + val["maKhachHang"] + "</td>" +
+                                    '</tr>'
+                            }
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+                });
+            } catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>');
+                console.log(err);
+            }
+        }
+    </script>
+}

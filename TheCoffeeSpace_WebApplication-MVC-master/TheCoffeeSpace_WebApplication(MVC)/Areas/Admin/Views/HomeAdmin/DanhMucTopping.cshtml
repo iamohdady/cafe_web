@@ -1,0 +1,180 @@
+﻿@using X.PagedList.Mvc.Core;
+@using TheCoffeeSpace_WebApplication_MVC_.Models;
+@model X.PagedList.IPagedList<TbTopping>
+
+@{
+    ViewData["Title"] = "DanhMucTopping";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<h1>Danh Mục Topping</h1>
+</br>
+
+@using (Html.BeginForm("TimTopping", "admin", FormMethod.Get))
+{
+<form class=" d-none d-md-block m-2 p-2">
+    @Html.TextBox("tenTopping", null, new { @class = "w-75 form-control-sm bg-light border-0" })
+        <button type="submit" class="file-upload-browse btn btn-gradient-primary">Tìm Kiếm</button>
+</form>
+}
+
+</br>
+<p>
+    <a asp-action="ThemTopping">Thêm topping mới</a>
+</p>
+<p>@TempData["Message"]</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Topping
+            </th>
+            <th>
+                Tên Topping
+            </th>
+            <th>
+                Gía Bán
+            </th>
+            <th>
+                Ảnh
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaTopping)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenTopping)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaBan)
+            </td>
+            <td>
+                    <img src="@Url.Content("../LayoutAdmin/images/"+item.Anh)" alt="Chua Cap Nhat" style="height:100px;width:100px" />
+            </td>
+            <td>
+                <a asp-action="SuaTopping" asp-route-maTopping="@item.MaTopping">Sửa</a> |
+                <a asp-action="XoaTopping" asp-route-maTopping="@item.MaTopping">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@Html.PagedListPager(Model,page => Url.Action("DanhMucTopping", new {page=page}), new
+X.PagedList.Web.Common.PagedListRenderOptions(){
+    LiElementClasses = new List<String> {"page-item"},
+    PageClasses = new List<String> {"page-link"}
+})
+
+@*
+<div class="form-group">
+    <div class="input-group col-xs-12">
+        <input type="text" id="timkiem" class="form-control" id="exampleInputEmail3" placeholder="Nhập mã topping cần tìm kiếm">
+        <span class="input-group-append">
+            <button class="file-upload-browse btn btn-gradient-primary" type="button" onclick="timTopping()">Tìm kiếm</button>
+        </span>
+    </div>
+</div>
+<br />
+
+<script>
+    function showToppingByCategory(getUrl) {
+        var str = '';
+        $.ajax({
+            type: "GET",
+            url: getUrl,
+            dataType: "json",
+            success: function (data) {
+            }
+        }
+</script>
+<table id="display-search" class="table">
+</table>
+
+<div class="pagination"></div>
+
+@section Scripts
+    {
+    <script>
+                var pageLimited = 8;
+
+        $(document).ready(function () {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/topping",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+
+                        var i = 0;
+                        var content = '<tr class="table-warning"> <th> Mã Topping </th>' +
+                            '<th> Tên Topping </th> <th> Gía Bán </th> <th>Ảnh</th> </tr>';
+                        $.each(result, function (key, val) {
+                            content += '<tr >' +
+                                "<td>" + val["maTopping"] + "</td>" +
+                                "<td>" + val["tenTopping"] + "</td>" +
+                                "<td>" + val["giaBan"] + "</td>" +
+                                '<td> <img src="../LayoutAdmin/images/' + val["anh"] + '" alt="Chua Cap Nhat" style="height: 100px; width: 100px" /> </td>' 
+                                 + '</tr>'
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+
+
+                });
+            }
+            catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>')
+            }
+        });
+
+        function timTopping() {
+            try {
+                var maTopping = $("#timkiem").val();
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/topping",
+                    dataType: "json",
+                    success: function (result) {
+                        var content = '<tr class="table-warning"> <th> Mã Topping </th>' +
+                            '<th> Tên Topping </th> <th> Gía Bán </th> <th>Ảnh</th> </tr>';
+                        $.each(result, function (key, val) {
+                            if (maTopping == val["maTopping"] || maTopping == "") {
+                                content += '<tr >' +
+                                "<td>" + val["maTopping"] + "</td>" +
+                                "<td>" + val["tenTopping"] + "</td>" +
+                                "<td>" + val["giaBan"] + "</td>" +
+                                '<td> <img src="../LayoutAdmin/images/' + val["anh"] + '" alt="Chua Cap Nhat" style="height: 100px; width: 100px" /> </td>' 
+                                 + '</tr>'
+                            }
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+                });
+            } catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>');
+                console.log(err);
+            }
+        }
+    </script>
+}
+*@
+@section Scripts
+    {
+}

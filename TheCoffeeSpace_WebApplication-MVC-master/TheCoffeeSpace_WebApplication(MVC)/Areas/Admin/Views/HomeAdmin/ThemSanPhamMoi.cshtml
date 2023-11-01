@@ -1,0 +1,99 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TheCoffeeSpace_WebApplication_MVC_.Models.TbSanPham
+
+@{
+    ViewData["Title"] = "ThemSanPhamMoi";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Thêm Sản Phẩm Mới</h1>
+
+<h4>Sản Phẩm</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @*id="themSanPham"*@
+        <form method="post" asp-action="ThemSanPhamMoi" >
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaSanPham" class="control-label"></label>
+                <input id="maSanPham" asp-for="MaSanPham" class="form-control" />
+                <span asp-validation-for="MaSanPham" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenSanPham" class="control-label"></label>
+                <input id="tenSanPham" asp-for="TenSanPham" class="form-control" />
+                <span asp-validation-for="TenSanPham" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GiaBan" class="control-label"></label>
+                <input id="giaBan" asp-for="GiaBan" class="form-control" />
+                <span asp-validation-for="GiaBan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HinhAnh" class="control-label"></label>
+                <input id="hinhAnh" asp-for="HinhAnh" type="file" name="imageFile" class="form-control" />
+                <span asp-validation-for="HinhAnh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GhiChu" class="control-label"></label>
+                <input id="ghiChu" asp-for="GhiChu" class="form-control" />
+                <span asp-validation-for="GhiChu" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaNhomSp" class="control-label"></label>
+                <select id="maNhomSp" asp-for="MaNhomSp" class ="form-control" asp-items="ViewBag.MaNhomSp"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Thêm" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+@*
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#themSanPhams').click(function (e) {
+
+            var formData = {
+                MaSanPham: $('#maSanPham').val(),
+                TenSanPham: $('#tenSanPham').val(),
+                GiaBan: $('#giaBan').val(),
+                HinhAnh: $('#hinhAnh').val(),
+                GhiChu: $('#ghiChu').val(),
+                MaNhomSP: $('#maNhomSp').val(),
+            };
+
+            var form = document.forms['themSanPham'];
+            form.action = '/api/SanPhamAPI/Post';
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:7143/api/SanPhamAPI/Post',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    form.submit()
+                    alert('them thanh cong');
+                    console.log('Success');
+                },
+                error: function (data) {
+                    console.log('Error');
+                }
+            });
+        });
+    });
+</script>
+*@
+@section Scripts
+    {
+
+
+
+            }
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

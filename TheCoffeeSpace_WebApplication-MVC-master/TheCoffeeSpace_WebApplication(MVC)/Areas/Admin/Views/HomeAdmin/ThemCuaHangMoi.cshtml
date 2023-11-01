@@ -1,0 +1,101 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TheCoffeeSpace_WebApplication_MVC_.Models.TbCuaHang
+
+@{
+    ViewData["Title"] = "ThemCuaHangMoi";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Thêm Cửa Hàng Mới</h1>
+
+<h4>Cửa Hàng</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @* id="themCuaHang"*@
+        <form method="post"  asp-action="ThemCuaHangMoi">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaCuaHang" class="control-label"></label>
+                <input id="maCuaHang" asp-for="MaCuaHang" class="form-control" />
+                <span asp-validation-for="MaCuaHang" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenCuaHang" class="control-label"></label>
+                <input id="tenCuaHang" asp-for="TenCuaHang" class="form-control" />
+                <span asp-validation-for="TenCuaHang" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DiaChi" class="control-label"></label>
+                <input id="diaChi" asp-for="DiaChi" class="form-control" />
+                <span asp-validation-for="DiaChi" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SoDienThoai" class="control-label"></label>
+                <input id="soDienThoai" asp-for="SoDienThoai" class="form-control" />
+                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Email" class="control-label"></label>
+                <input id="email" asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Fanpage" class="control-label"></label>
+                <input id="fanpage" asp-for="Fanpage" class="form-control" />
+                <span asp-validation-for="Fanpage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+@*
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#themCuaHangs').click(function (e) {
+
+            var formData = {
+                MaCuaHang: $('#maCuaHang').val(),
+                TenCuaHang: $('#tenCuaHang').val(),
+                DiaChi: $('#diaChi').val(),
+                SoDienThoai: $('#soDienThoai').val(),
+                Email: $('#email').val(),
+                Fanpage: $('#fanpage').val(),
+            };
+
+            var form = document.forms['themCuaHang'];
+            form.action = '/api/CuaHangAPI/Post';
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:7143/api/CuaHangAPI/Post',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    form.submit()
+                    alert('them thanh cong');
+                    console.log('Success');
+                },
+                error: function (data) {
+                    console.log('Error');
+                }
+            });
+        });
+    });
+</script>
+*@
+@section Scripts
+    {
+
+
+
+            }
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

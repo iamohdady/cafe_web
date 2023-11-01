@@ -1,0 +1,175 @@
+﻿@using X.PagedList.Mvc.Core;
+@using TheCoffeeSpace_WebApplication_MVC_.Models;
+@model X.PagedList.IPagedList<TbVatTu>
+
+@{
+    ViewData["Title"] = "DanhMucVatTu";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<h1>Danh Mục Vật Tư</h1>
+
+@*@using (Html.BeginForm("TimVatTu", "admin", FormMethod.Get))
+{
+    <form class=" d-none d-md-block m-2 p-2">
+        @Html.TextBox("tenVatTu", null, new { @class = "w-75 form-control-sm bg-dark border-0" })
+        <button type="submit" class="btn btn-outline-secondary m-2 bg-light">Tìm Kiếm</button>
+    </form>
+}
+<h1>Danh Mục Vật Tư</h1>
+
+<p>
+    <a asp-action="Create">Thêm Vật Tư</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Vật Tư
+            </th>
+            <th>
+                Tên Vật Tư
+            </th>
+            <th>
+                Đơn Vị Tính
+            </th>
+            <th>
+                Ghi Chú
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaVatTu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenVatTu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DonViTinh)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GhiChu)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.MaVatTu">Edit</a> 
+                <a asp-action="Delete" asp-route-id="@item.MaVatTu">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<br />
+@Html.PagedListPager(Model,page => Url.Action("DanhMucVatTu", new {page=page}), new
+X.PagedList.Web.Common.PagedListRenderOptions(){
+    LiElementClasses = new List<String> {"page-item"},
+    PageClasses = new List<String> {"page-link"}
+})
+*@
+</br>
+
+<div class="form-group">
+    <div class="input-group col-xs-12">
+        <input type="text" id="timkiem" class="form-control" id="exampleInputEmail3" placeholder="Nhập mã vật tư cần tìm kiếm">
+        <span class="input-group-append">
+            <button class="file-upload-browse btn btn-gradient-primary" type="button" onclick="timVatTu()">Tìm kiếm</button>
+        </span>
+    </div>
+</div>
+<br />
+
+<script>
+    function showVatTuByCategory(getUrl) {
+        var str = '';
+        $.ajax({
+            type: "GET",
+            url: getUrl,
+            dataType: "json",
+            success: function (data) {
+            }
+        }
+</script>
+<table id="display-search" class="table">
+</table>
+
+<div class="pagination"></div>
+
+@section Scripts
+    {
+    <script>
+                    var pageLimited = 8;
+
+        $(document).ready(function () {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/vattu",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+
+                        var i = 0;
+                        var content = '<tr class="table-warning"> <th> Mã Vật Tư </th>' +
+                            '<th> Tên Vật Tư </th> <th> Đơn Vị Tính </th> <th>Ghi Chú</th> </tr>';
+                        $.each(result, function (key, val) {
+                            content += '<tr >' +
+                                "<td>" + val["maVatTu"] + "</td>" +
+                                "<td>" + val["tenVatTu"] + "</td>" +
+                                "<td>" + val["donViTinh"] + "</td>" +
+                                "<td>" + val["ghiChu"] + "</td>" +
+                                + '</tr>'
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+
+
+                });
+            }
+            catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>')
+            }
+        });
+
+        function timVatTu() {
+            try {
+                var maVatTu = $("#timkiem").val();
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/vattu",
+                    dataType: "json",
+                    success: function (result) {
+                        var content = '<tr class="table-warning"> <th> Mã Vật Tư </th>' +
+                            '<th> Tên Vật Tư </th> <th> Đơn Vị Tính </th> <th>Ghi Chú</th> </tr>';
+                        $.each(result, function (key, val) {
+                            if (maVatTu == val["maVatTu"] || maVatTu == "") {
+                                content += '<tr >' +
+                                    "<td>" + val["maVatTu"] + "</td>" +
+                                    "<td>" + val["tenVatTu"] + "</td>" +
+                                    "<td>" + val["donViTinh"] + "</td>" +
+                                    "<td>" + val["ghiChu"] + "</td>" +
+                                    + '</tr>'
+                            }
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+                });
+            } catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>');
+                console.log(err);
+            }
+        }
+    </script>
+}

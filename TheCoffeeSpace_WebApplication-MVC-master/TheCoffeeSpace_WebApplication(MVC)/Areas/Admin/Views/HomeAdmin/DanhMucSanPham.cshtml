@@ -1,0 +1,196 @@
+﻿@using X.PagedList.Mvc.Core;
+@using TheCoffeeSpace_WebApplication_MVC_.Models;
+@model X.PagedList.IPagedList<TbSanPham>
+@{
+    ViewData["Title"] = "DanhMucSanPham";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>Danh Mục Sản Phẩm</h1>
+
+
+</br>
+@using (Html.BeginForm("TimSanPham", "admin", FormMethod.Get))
+{
+    <form class=" d-none d-md-block m-2 p-2">
+        @Html.TextBox("tenSanPham", null, new { @class = "w-75 form-control-sm bg-light border-0" })
+        <button type="submit" class="file-upload-browse btn btn-gradient-primary">Tìm Kiếm</button>
+    </form>
+}
+</br>
+<p>
+    <a asp-action="ThemSanPhamMoi">Thêm sản phẩm mới</a>
+</p>
+<p>@TempData["Message"]</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Sản Phẩm
+            </th>
+            <th>
+                Tên Sản Phẩm
+            </th>
+            <th>
+                Gía Bán
+            </th>
+            <th>
+                Hình Ảnh
+            </th>
+            <th>
+                Ghi Chú
+            </th>
+            <th>
+                Mã Nhóm
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaSanPham)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TenSanPham)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GiaBan)
+            </td>
+            <td>
+                <img src="@Url.Content("../LayoutAdmin/images/"+item.HinhAnh)" alt="Chua Cap Nhat" style="height:100px;width:100px" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GhiChu)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaNhomSp)
+            </td>
+            <td>
+                <a asp-action="SuaSanPham" asp-route-maSanPham="@item.MaSanPham">Sửa</a> |
+                <a asp-action="Delete" asp-route-id="@item.MaSanPham">Xóa</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<br />
+@Html.PagedListPager(Model,page => Url.Action("DanhMucSanPham", new {page=page}), new
+X.PagedList.Web.Common.PagedListRenderOptions(){
+    LiElementClasses = new List<String> {"page-item"},
+    PageClasses = new List<String> {"page-link"}
+})
+
+@*
+<div class="form-group">
+    <div class="input-group col-xs-12">
+        <input type="text" id="timkiem" class="form-control" id="exampleInputEmail3" placeholder="Nhập mã sản phẩm cần tìm kiếm">
+        <span class="input-group-append">
+            <button class="file-upload-browse btn btn-gradient-primary" type="button" onclick="timSanPham()">Tìm kiếm</button>
+        </span>
+    </div>
+</div>
+<br />
+
+<script>
+    function showSanPhamByCategory(getUrl){
+        var str='';
+        $.ajax({
+            type: "GET",
+            url: getUrl,
+            dataType: "json",
+            success: function(data){
+            }
+    }
+</script>
+<table id="display-search" class="table">
+</table>
+
+<div class="pagination"></div>
+
+@section Scripts
+    {
+    <script>
+        var pageLimited = 8;
+
+        $(document).ready(function() {
+            try
+            {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/sanpham",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+
+        var i = 0;
+                        var content = '<tr class="table-warning"> <th> Mã Sản Phẩm </th>' +
+                    '<th> Tên Sản Phẩm </th> <th> Gía Bán </th> <th>Hình Ảnh</th> <th> Ghi Chú </th> </tr>';
+                        $.each(result, function(key, val){
+                                content += '<tr >' +
+                                    "<td>" + val["maSanPham"] + "</td>" +
+                                    "<td>" + val["tenSanPham"] + "</td>" +
+                                    "<td>" + val["giaBan"] + "</td>" +
+                                    '<td> <img src="../LayoutAdmin/images/' + val["hinhAnh"] + '" alt="Chua Cap Nhat" style="height: 100px; width: 100px" /> </td>' +
+                                    "<td>" + val["ghiChu"] + "</td>" + '</tr>'
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                },
+                    
+                    
+
+                });
+            }
+            catch (err)
+            {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>')
+            }
+        });
+
+        function timSanPham(){
+            try
+            {
+                var maSanPham = $("#timkiem").val();
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/sanpham",
+                    dataType: "json",
+                    success: function (result) {
+                        var content = '<tr class="table-warning"> <th> Mã Sản Phẩm </th>' +
+                            '<th> Tên Sản Phẩm </th> <th> Gía Bán </th> <th>Hình Ảnh</th> <th> Ghi Chú </th> </tr>';
+                        $.each(result, function(key, val){
+                            if (maSanPham == val["maSanPham"] || maSanPham == "")
+                            {
+                                content += '<tr >' +
+                                    "<td>" + val["maSanPham"] + "</td>" +
+                                    "<td>" + val["tenSanPham"] + "</td>" +
+                                    "<td>" + val["giaBan"] + "</td>" +
+                                    '<td> <img src="../LayoutAdmin/images/' + val["hinhAnh"] + '" alt="Chua Cap Nhat" style="height: 100px; width: 100px" /> </td>' +
+                                    "<td>" + val["ghiChu"] + "</td>" + '</tr>'
+                            }
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+                   
+                });
+            } catch (err)
+            {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>');
+                console.log(err);
+            }
+        }
+    </script>
+}*@
+@section Scripts
+    {}

@@ -1,0 +1,87 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TheCoffeeSpace_WebApplication_MVC_.Models.TbTopping
+
+@{
+    ViewData["Title"] = "ThemTopping";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Thêm Topping</h1>
+
+<h4>Topping</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @*asp-action="ThemTopping"*@
+        <form method="post" id="themTopping">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaTopping" class="control-label"></label>
+                <input id="maTopping" asp-for="MaTopping" class="form-control" />
+                <span asp-validation-for="MaTopping" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TenTopping" class="control-label"></label>
+                <input id="tenTopping" asp-for="TenTopping" class="form-control" />
+                <span asp-validation-for="TenTopping" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GiaBan" class="control-label"></label>
+                <input id="giaBan" asp-for="GiaBan" class="form-control" />
+                <span asp-validation-for="GiaBan" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Anh" class="control-label"></label>
+                <input id="anh" type="file" name="imageFile" asp-for="Anh" class="form-control" />
+                <span asp-validation-for="Anh" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Tạo" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#themToppings').click(function (e) {
+
+            var formData = {
+                MaTopping: $('#maTopping').val(),
+                TenTopping: $('#tenTopping').val(),
+                GiaBan: $('#giaBan').val(),
+                Anh: $('#anh').val(),
+            };
+
+            var form = document.forms['themTopping'];
+            form.action = '/api/ToppingAPI/Post';
+
+            $.ajax({
+                type: 'POST',
+                url: 'https://localhost:7143/api/ToppingAPI/Post',
+                data: JSON.stringify(formData),
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                success: function (data) {
+                    form.submit()
+                    alert('them thanh cong');
+                    console.log('Success');
+                },
+                error: function (data) {
+                    console.log('Error');
+                }
+            });
+        });
+    });
+</script>
+@section Scripts
+    {
+
+
+
+            }
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

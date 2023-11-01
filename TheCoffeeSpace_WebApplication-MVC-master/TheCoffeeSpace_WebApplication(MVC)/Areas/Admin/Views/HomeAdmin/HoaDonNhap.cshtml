@@ -1,0 +1,159 @@
+﻿@using TheCoffeeSpace_WebApplication_MVC_.Models;
+@using X.PagedList.Mvc.Core;
+@model X.PagedList.IPagedList<TbHoaDonNhap>;
+@{
+    ViewData["Title"] = "HoaDonNhap";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<h1>Hóa Đơn Nhập</h1>
+@*
+<p>
+    <a asp-action="ThemHoaDonNhap">Thêm Hóa Đơn Nhập</a>
+</p>
+<p>@TempData["Message"]</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Mã Hóa Đơn Nhập
+            </th>
+            <th>
+                Ngày Lập
+            </th>
+            <th>
+                Mã Nhà Cung Cấp 
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaHoaDonNhap)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NgayLap)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaNhaCungCap)
+            </td>
+            <td>
+                <a asp-action="SuaHoaDonNhap" asp-route-maHoaDonNhap="@item.MaHoaDonNhap">Sửa</a> |
+                <a asp-action="Details" asp-route-id="@item.MaHoaDonNhap">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.MaHoaDonNhap">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<br/>
+@Html.PagedListPager(Model, page => Url.Action("HoaDonNhap", new {page= page}), new X.PagedList.Web.Common.PagedListRenderOptions(){
+            LiElementClasses = new List<String>{"bg-secondary page-item"},
+            PageClasses = new List<String>{"page-link"}
+        })
+*@
+</br>
+<div class="form-group">
+    <div class="input-group col-xs-12">
+        <input type="text" id="timkiem" class="form-control" id="exampleInputEmail3" placeholder="Nhập mã hóa đơn cần tìm kiếm">
+        <span class="input-group-append">
+            <button class="file-upload-browse btn btn-gradient-primary" type="button" onclick="timHoaDonNhap()">Tìm kiếm</button>
+        </span>
+    </div>
+</div>
+<br />
+
+<script>
+    function showHoaDonNhapByCategory(getUrl) {
+        var str = '';
+        $.ajax({
+            type: "GET",
+            url: getUrl,
+            dataType: "json",
+            success: function (data) {
+            }
+        }
+</script>
+<table id="display-search" class="table">
+</table>
+
+<div class="pagination"></div>
+
+@section Scripts
+    {
+    <script>
+            var pageLimited = 8;
+
+        $(document).ready(function () {
+            try {
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/hoadonnhap",
+                    dataType: "json",
+                    success: function (result) {
+                        console.log(result);
+
+                        var i = 0;
+                        var content = '<tr class="table-warning"> <th> Mã Hóa Đơn Nhập </th>' +
+                            '<th> Ngày Lập </th> <th> Mã Nhà Cung Cấp </th></tr>';
+                        $.each(result, function (key, val) {
+                            content += '<tr >' +
+                                "<td>" + val["maHoaDonNhap"] + "</td>" +
+                                "<td>" + val["ngayLap"] + "</td>" +
+                                "<td>" + val["maNhaCungCap"] + "</td>" +
+                                 '</tr>'
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+
+
+                });
+            }
+            catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>')
+            }
+        });
+
+        function timHoaDonNhap() {
+            try {
+                var maHoaDonNhap = $("#timkiem").val();
+                $.ajax({
+                    type: "GET",
+                    url: "https://localhost:7086/coffee/hoadonnhap",
+                    dataType: "json",
+                    success: function (result) {
+                        var content = '<tr class="table-warning"> <th> Mã Hóa Đơn Nhập </th>' +
+                            '<th> Ngày Lập </th> <th> Mã Nhà Cung Cấp </th></tr>';
+                        $.each(result, function (key, val) {
+                            if (maHoaDonNhap == val["maHoaDonNhap"] || maHoaDonNhap == "") {
+                                content += '<tr >' +
+                                    "<td>" + val["maHoaDonNhap"] + "</td>" +
+                                    "<td>" + val["ngayLap"] + "</td>" +
+                                    "<td>" + val["maNhaCungCap"] + "</td>" +
+                                    '</tr>'
+                            }
+
+                        });
+                        $("#display-search").html(content);
+                    },
+                    error: function (req, status, error) {
+                        $("#display-search").html('<h3>Không thể kết nối đến Server</h3>');
+                    },
+
+                });
+            } catch (err) {
+                $("#display-search").html('<h3>Có lỗi xảy ra trong quá trình request!</h3>');
+                console.log(err);
+            }
+        }
+    </script>
+}

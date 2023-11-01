@@ -1,0 +1,41 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model TheCoffeeSpace_WebApplication_MVC_.Models.TbHoaDonNhap
+
+@{
+    ViewData["Title"] = "ThemHoaDonNhap";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<h1>Thêm Hóa Đơn Nhập</h1>
+
+<h4>Hóa Đơn Nhập</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="ThemHoaDonNhap">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="MaHoaDonNhap" class="control-label"></label>
+                <input asp-for="MaHoaDonNhap" class="form-control" />
+                <span asp-validation-for="MaHoaDonNhap" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NgayLap" class="control-label"></label>
+                <input asp-for="NgayLap" class="form-control" />
+                <span asp-validation-for="NgayLap" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaNhaCungCap" class="control-label"></label>
+                <select asp-for="MaNhaCungCap" class ="form-control" asp-items="ViewBag.MaNhaCungCap"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
